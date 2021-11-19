@@ -5,32 +5,12 @@
 #connect game to server
 #develop method for allowing enemy to make a turn (work on alllowing the enemy to make a move on the same computer first?)
 
+import socket
+
 # Messages
 HIT = "HIT"
 MISS = "MISS"
 QUIT = "QUIT"
-
-
-###Server Stuff  ### NOT Completed ###
-import socket
-
-try:
-    HOST, PORT = '192.168.228.52', 9000
-
-    socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    socket.connect((HOST, PORT))
-
-    socket.send("Hello server".encode('utf-8'))
-
-
-    name = input("Name: ")
-
-    while True:
-        if socket.recv(1024).decode('utf-8') == "Your turn":
-            socket.send(name.encode('utf-8'))
-except ConnectionRefusedError:
-    print("Change local ip address in 'HOST' variable")
     
 
 
@@ -266,4 +246,25 @@ setup_your_boats(your_board)
 
 
 
+###Server Stuff  ### NOT Completed ###
+
+try:
+    HOST, PORT = '192.168.228.52', 9000
+
+    socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    socket.connect((HOST, PORT))
+
+    socket.send("Hello server".encode('utf-8'))
+
+
+    name = input("Name: ")
+
+    while True:
+        if socket.recv(1024).decode('utf-8') == "Opponent found\nSet up your boards":
+            ## This is where we call setup the board function because the server responded with opponent found
+            setup_your_boats(your_board)
+            socket.send(name.encode('utf-8'))
+except ConnectionRefusedError:
+    print("Change local ip address in 'HOST' variable")
 
