@@ -110,7 +110,7 @@ def setup_your_boats(board):
             #grid # is valid, check if end of boat fits
             if hor_ver == "h":
                 checker = ord(placement[1])
-                if (checker+selected_boat) > 72:
+                if (checker+selected_boat) > 73:
                     print("The length of the boat goes off the grid, try again.")
                     continue
             else:
