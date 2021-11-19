@@ -29,7 +29,8 @@ class Boat:
 
 def setup_your_boats(board):
     boats = Boat()
-    while not boats.boatOne and not boats.boatTwo and not boats.boatThree and not boats.boatFour and not boats.boatFive: #will keep running till there are no more selectable boats
+    while boats.boatOne or boats.boatTwo or boats.boatThree or boats.boatFour or boats.boatFive: #will keep running till there are no more selectable boats
+        display_grid(board)
         print("Possible boats to play:")
         if boats.boatFive:
             print("Long Boat (5 Long)")
@@ -80,7 +81,7 @@ def setup_your_boats(board):
             if hor_ver == "":
                 print("Please enter something")
                 continue
-            if hor_ver != "v" or hor_ver != "h":
+            if hor_ver != "v" and hor_ver != "h":
                 print("Please enter a valid input.")
                 continue
             break
@@ -93,6 +94,9 @@ def setup_your_boats(board):
             if placement == "":
                 print("Please enter something")
                 continue
+            if (len(placement) > 2) or (len(placement) < 2):
+                print("please enter a valid grid #")
+                continue
             try:
                 placementNumber = int(placement[0])
             except ValueError:
@@ -101,11 +105,9 @@ def setup_your_boats(board):
             if placement[1] not in acceptedChars:
                 print("please enter a valid grid letter.")
                 continue
-            if len(placement) > 2 or len(placement) < 1:
-                print("please enter a valid grid #")
-                continue
+
             #grid # is valid, check if end of boat fits
-            if hor_ver == "H":
+            if hor_ver == "h":
                 checker = ord(placement[1])
                 if (checker+selected_boat) > 72:
                     print("The length of the boat goes off the grid, try again.")
@@ -115,19 +117,55 @@ def setup_your_boats(board):
                     print("The length of the boat goes off the grid, try again.")
                     continue
             if placement[1] == "A":
-                ETUP = str(placementNumber)+"1"
+                ETUP = 1
             elif placement[1] == "B":
-                ETUP = str(placementNumber)+"2"
+                ETUP = 2
             elif placement[1] == "C":
-                ETUP = str(placementNumber) + "2"
+                ETUP = 3
             elif placement[1] == "D":
-                ETUP = str(placementNumber)+"2"
+                ETUP = 4
             elif placement[1] == "E":
-                ETUP = str(placementNumber)+"2"
+                ETUP = 5
             elif placement[1] == "F":
-                ETUP = str(placementNumber)+"2"
+                ETUP = 6
             elif placement[1] == "G":
-                ETUP = str(placementNumber)+"2"
+                ETUP = 7
+            elif placement[1] == "H":
+                ETUP = 8
+
+            if hor_ver == "h":
+                resetter = False
+                for i in range(selected_boat):
+                    if(board[placementNumber][ETUP+i].SHIPQ):
+                        resetter = True
+            else:
+                resetter = False
+                for i in range(selected_boat):
+                    if (board[placementNumber+i][ETUP].SHIPQ):
+                        resetter = True
+
+            if resetter: #resetter is used cuz a for loop and a continue would just reset the for
+                print("There is a ship intersecting this. please try again")
+                continue
+
+            #Otherwise place the ships
+            if hor_ver == "h":
+                for i in range(selected_boat):
+                    board[placementNumber][ETUP+i].SHIPQ = True
+            else:
+                for i in range(selected_boat):
+                    board[placementNumber + i][ETUP].SHIPQ = True
+            if selected_boat == 1:
+                boats.boatOne = False
+            elif selected_boat == 2:
+                boats.boatTwo = False
+            elif selected_boat == 3:
+                boats.boatThree = False
+            elif selected_boat == 4:
+                boats.boatFour = False
+            else:
+                boats.boatFive = False
+            break;
 
 
 
@@ -161,6 +199,7 @@ def wait_for_responce():
     pass
 
 rws = 8
+
 cls = "ABCDEFGH"
 rows = []
 cols = []
@@ -174,7 +213,6 @@ your_board = rows #This will be an empty grid
 enemy_board = rows #This will be an empty grid
 
 setup_your_boats(your_board)
-
 
 
 
