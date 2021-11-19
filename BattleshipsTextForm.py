@@ -89,6 +89,7 @@ def setup_your_boats(board):
 
         acceptedChars = "ABCDEFGH"
         while True:
+            display_grid(your_board)
             print("where do you want the head of the boat? (top to bottom, left to right)")
             placement = input("Input Grid #: ").strip().upper()
             if placement == "":
@@ -117,21 +118,21 @@ def setup_your_boats(board):
                     print("The length of the boat goes off the grid, try again.")
                     continue
             if placement[1] == "A":
-                ETUP = 1
+                ETUP = 0
             elif placement[1] == "B":
-                ETUP = 2
+                ETUP = 1
             elif placement[1] == "C":
-                ETUP = 3
+                ETUP = 2
             elif placement[1] == "D":
-                ETUP = 4
+                ETUP = 3
             elif placement[1] == "E":
-                ETUP = 5
+                ETUP = 4
             elif placement[1] == "F":
-                ETUP = 6
+                ETUP = 5
             elif placement[1] == "G":
-                ETUP = 7
+                ETUP = 6
             elif placement[1] == "H":
-                ETUP = 8
+                ETUP = 7
 
             if hor_ver == "h":
                 resetter = False
@@ -151,10 +152,10 @@ def setup_your_boats(board):
             #Otherwise place the ships
             if hor_ver == "h":
                 for i in range(selected_boat):
-                    board[placementNumber][ETUP+i].SHIPQ = True
+                    board[placementNumber-1][ETUP+i].SHIPQ = True
             else:
                 for i in range(selected_boat):
-                    board[placementNumber + i][ETUP].SHIPQ = True
+                    board[placementNumber + i][ETUP-1].SHIPQ = True
             if selected_boat == 1:
                 boats.boatOne = False
             elif selected_boat == 2:
@@ -193,7 +194,27 @@ def win_or_lose():
     pass
 
 def display_grid(board):
-    pass
+    abc = '|' + '-'*5
+    col = '   '
+    global cls
+    for l in cls:
+        col += f'   {l}  '
+    print(col)
+    for row in board:
+        print('   ' + abc * 8 + '|')
+        line = ''
+        for column in row:
+            letter = column.ID[0]
+            if column.SHIPQ == False:
+                line += '|     '
+            elif column.SHIPQ == True and column.HIT == False:
+                line += '|  X  '
+            elif column.SHIPQ == True and column.HIT == True:
+                line += '|  O  '
+        print(f"{int(letter)}  " + line + '|')
+    print('   ' + abc * 8 + '|')
+
+    
 
 def wait_for_responce():
     pass
