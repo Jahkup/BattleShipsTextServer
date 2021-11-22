@@ -181,14 +181,27 @@ def setup_your_boats(board):
 
 
 
+def sendArray(board):
+    arrayinString = ""
+    for row in board:
+        for column in row:
+            if column.SHIPQ == True:
+                arrayinString += "1"
+            else:
+                arrayinString += "0"
 
+    return arrayinString 
 
 
 
 
 def get_enemy_board_boats(board):
     #get direct grid array from server enemyside
-    pass
+    global possibleHits
+    for row in board:
+        for column in row:
+            if column.SHIPQ == True:
+                possibleHits.append(column.ID)
 
 def make_your_move():
     pass
@@ -228,6 +241,8 @@ def display_grid(board):
 def wait_for_responce():
     pass
 
+
+possibleHits = []
 rws = 8
 
 cls = "ABCDEFGH"
@@ -243,6 +258,8 @@ your_board = rows #This will be an empty grid
 enemy_board = rows #This will be an empty grid
 
 setup_your_boats(your_board)
+
+print(sendArray(your_board))
 
 
 
@@ -264,7 +281,9 @@ try:
         if socket.recv(1024).decode('utf-8') == "Opponent found\nSet up your boards":
             ## This is where we call setup the board function because the server responded with opponent found
             setup_your_boats(your_board)
-            socket.send(name.encode('utf-8'))
+            socket.send("Boards have been setup".encode('utf-8'))
+        else:
+            print(socket.recv(1024).decode('utf-8'))
 except ConnectionRefusedError:
     print("Change local ip address in 'HOST' variable")
 
